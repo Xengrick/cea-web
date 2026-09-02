@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="gsap.css">
+
+    <title>GSAP</title>
+</head>
+
+<body>
+
+    <main>
+
+        <svg width="600" height="300" viewBox="0 0 600 300">
+
+            <path
+                class="tuberia"
+                d="M50 100 H350 V200 H550"
+                fill="none"
+                stroke="#333"
+                stroke-width="50">
+            </path>
+
+            <path
+                class="agua"
+                d="M50 100 H350 V200 H550"
+                fill="none"
+                stroke="#0833A2"
+                stroke-width="30"
+                stroke-linecap="round">
+            </path>
+
+            <path
+                class="flujo"
+                d="M50 100 H350 V200 H550"
+                fill="none"
+                stroke="#4da6ff"
+                stroke-width="8"
+                stroke-linecap="round"
+                stroke-dasharray="10 15">
+            </path>
+
+        </svg>
+
+        <div class="controles">
+            <button id="atras">&lt;</button>
+            <button id="adelante">&gt;</button>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/MotionPathPlugin.min.js"></script>
+
+    <script src="gsap.js"></script>
+
+</body>
+
+</html>
