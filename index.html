@@ -16,6 +16,23 @@
 
         <svg width="600" height="300" viewBox="0 0 600 300">
 
+            <defs>
+                <mask id="mascaraAgua">
+                    <rect width="600" height="300" fill="black"></rect>
+            
+                    <path
+                        class="agua-mascara"
+                        d="M50 100 H350 V200 H550"
+                        fill="none"
+                        stroke="white"
+                        stroke-width="30"
+                        stroke-linecap="round"
+                        stroke-dasharray="600"
+                        stroke-dashoffset="600">
+                    </path>
+                </mask>
+            </defs>
+
             <path
                 class="tuberia"
                 d="M50 100 H350 V200 H550"
@@ -40,7 +57,8 @@
                 stroke="#4da6ff"
                 stroke-width="8"
                 stroke-linecap="round"
-                stroke-dasharray="10 15">
+                stroke-dasharray="10 15"
+                mask="url(#mascaraAgua)">
             </path>
 
         </svg>
