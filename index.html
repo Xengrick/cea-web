@@ -1,80 +1,534 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="gsap.css">
-
-    <title>GSAP</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nuestra agua, nuestro futuro</title>
+  <link rel="stylesheet" href="css/estilos.css">
 </head>
-
 <body>
 
-    <main>
+  <main>
+    <!--
+      Lienzo del tamaño total de la casa: 1024 x 700
+    -->
+    <svg id="escena" viewBox="0 0 1024 700" role="img" aria-label="Casa de una familia con la tele, los personajes y las nubes en movimiento">
 
-        <svg width="600" height="300" viewBox="0 0 600 300">
+       <!-- Piezas que se reutilizan (se dibujan una vez y se colocan con <use>) -->
+        <defs>
+            <!-- Cojín del sillón, se dibuja el izquierdo y el derecho es su reflejo -->
+            <g id="cojin">
+              <path class="cojin" d="M198.3 624 C215 620 236 632 236.7 651.7 C222 652 202 645 198.3 624Z"/>
+              <path class="cojin-luz" d="M198.3 624 C212 622 228 630 232 640 C218 640 206 636 198.3 624Z"/>
+            </g>
 
-            <defs>
-                <mask id="mascaraAgua">
-                    <rect width="600" height="300" fill="black"></rect>
-            
-                    <path
-                        class="agua-mascara"
-                        d="M50 100 H350 V200 H550"
-                        fill="none"
-                        stroke="white"
-                        stroke-width="30"
-                        stroke-linecap="round"
-                        stroke-dasharray="600"
-                        stroke-dashoffset="600">
-                    </path>
-                </mask>
-            </defs>
+            <!-- Buró de noche: se dibuja una vez y se coloca 2 veces con <use> -->
+              <g id="buro-noche">
+                <rect class="madera-oscura" x="2"  y="44" width="5" height="8"/>
+                <rect class="madera-oscura" x="39" y="44" width="5" height="8"/>
+                <rect class="buro" x="0" y="0" width="46" height="44"/>
+                <rect class="cajon-buro-noche" x="5" y="4" width="36" height="16"/>
+                <rect class="cajon-buro-noche" x="5" y="24" width="36" height="16"/>
+                <rect class="boton-sillon" x="14" y="13" width="18" height="2"/>
+                <rect class="boton-sillon" x="14" y="31" width="18" height="2"/>
+                <rect class="madera-oscura" x="20" y="-16" width="4" height="16"/>
+                <ellipse class="madera-oscura" cx="22" cy="-16" rx="6" ry="2"/>
+                <path class="pantalla-lampara" d="M8,-16 L36,-16 L32,-30 L12,-30 Z"/>
+              </g>
 
-            <path
-                class="tuberia"
-                d="M50 100 H350 V200 H550"
-                fill="none"
-                stroke="#333"
-                stroke-width="50">
-            </path>
+            <!-- Globo dibujo -->
+            <clipPath id="recorte-globo"><circle cx="407.7" cy="606.7" r="21.7"/></clipPath>
 
-            <path
-                class="agua"
-                d="M50 100 H350 V200 H550"
-                fill="none"
-                stroke="#0833A2"
-                stroke-width="30"
-                stroke-linecap="round">
-            </path>
+            <!-- Nube para usarla varias veces-->
+            <g id="nube">
+              <rect x="15" y="45" width="170" height="45" rx="22.5"/>
+              <circle cx="62"  cy="50" r="30"/>
+              <circle cx="108" cy="38" r="38"/>
+              <circle cx="152" cy="56" r="28"/>
+            </g>
 
-            <path
-                class="flujo"
-                d="M50 100 H350 V200 H550"
-                fill="none"
-                stroke="#4da6ff"
-                stroke-width="8"
-                stroke-linecap="round"
-                stroke-dasharray="10 15"
-                mask="url(#mascaraAgua)">
-            </path>
+            <!-- Tablas de la barda: alta (90) y corta (60), con punta redondeada -->
+            <path id="tabla-alta"  d="M0 7 A7 7 0 0 1 14 7 V90 H0 Z"/>
+            <path id="tabla-corta" d="M0 7 A7 7 0 0 1 14 7 V60 H0 Z"/>
 
-        </svg>
+            <!-- Colinas de pasto  -->
+            <pattern id="colinas" x="48" y="674" width="72" height="26" patternUnits="userSpaceOnUse">
+              <ellipse class="pasto" cx="0"  cy="12" rx="48" ry="12"/>
+              <ellipse class="pasto" cx="72" cy="12" rx="48" ry="12"/>
+            </pattern>
 
-        <div class="controles">
-            <button id="atras">&lt;</button>
-            <button id="adelante">&gt;</button>
-        </div>
+          </defs>
 
-    </main>
+      <!-- FONDO: lo más lejano, cielo (que este esta hecho en el CSS), nubes y pasto. -->
+      <g id="fondo">
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/MotionPathPlugin.min.js"></script>
+       <!-- NUBES -->
+       <g id="nubes">
+        <!-- Nube 1: la más rápida -->
+        <g class="nube-anim" data-vel="50">
+          <use href="#nube" class="nube" transform="translate(306 49) scale(1.1)"/>
+        </g>
 
-    <script src="gsap.js"></script>
+        <!-- Nube 2 (abajo a la izquierda): lenta -->
+        <g class="nube-anim" data-vel="16">
+          <use href="#nube" class="nube" transform="translate(192 155) scale(0.9)"/>
+        </g>
 
+        <!-- Nube del título: la segunda más rápida (el texto viaja con ella) -->
+        <g class="nube-anim" data-vel="28">
+          <use href="#nube" class="nube" transform="translate(588 13) scale(1.64 1.75)"/>
+          <text class="titulo-nube" x="752" y="96"  text-anchor="middle" textLength="207" lengthAdjust="spacingAndGlyphs">NUESTRA AGUA</text>
+          <text class="titulo-nube" x="752" y="131" text-anchor="middle" textLength="232" lengthAdjust="spacingAndGlyphs">NUESTRO FUTURO</text>
+        </g>
+
+        <!-- Nube 4 (abajo a la derecha): la más lenta -->
+        <g class="nube-anim" data-vel="12">
+          <use href="#nube" class="nube" transform="translate(667 172) scale(0.8)"/>
+        </g>
+
+      </g>
+
+        <!-- ÁRBOLES -->
+        <g id="arboles">
+
+          <!-- Árbol izquierdo -->
+          <g id="arbol-izq">
+            <path class="madera" d="M78 695 C80 640 80 590 84 560 L108 560 C108 600 112 650 124 695 Z"/>
+            <path class="madera" d="M92 615 Q80 592 64 586 L60 594 Q78 602 88 630 Z"/>
+            <circle class="arbol-oscuro" cx="95" cy="440" r="40"/>
+            <circle class="arbol-oscuro" cx="55" cy="478" r="38"/>
+            <circle class="arbol-claro"  cx="35" cy="522" r="38"/>
+            <circle class="arbol-claro"  cx="82" cy="522" r="45"/>
+            <circle class="arbol-claro"  cx="75" cy="562" r="33"/>
+          </g>
+
+          <!-- Árbol derecho -->
+          <g id="arbol-der">
+            <path class="madera" d="M905 692 C908 650 908 620 912 590 L932 590 C934 630 936 660 946 692 Z"/>
+            <circle class="arbol-oscuro" cx="865" cy="445" r="45"/>
+            <circle class="arbol-oscuro" cx="918" cy="455" r="38"/>
+            <circle class="arbol-oscuro" cx="850" cy="520" r="40"/>
+            <circle class="arbol-claro"  cx="960" cy="495" r="45"/>
+            <circle class="arbol-claro"  cx="965" cy="570" r="40"/>
+            <circle class="arbol-claro"  cx="900" cy="560" r="50"/>
+            <circle class="arbol-claro"  cx="880" cy="610" r="40"/>
+          </g>
+        </g>
+
+        <!-- pasto: se extiende mucho más allá del lienzo para llenar cualquier ancho de pantalla -->
+        <rect class="pasto" x="-3000" y="690" width="7024" height="10"/>
+        <rect x="-3000" y="674" width="7024" height="26" fill="url(#colinas)"/>
+
+      </g>
+
+      <!-- INTERIORES: el color de pared de cada cuarto (van DETRÁS de la estructura) -->
+      <g id="cuartos">
+        <polygon id="pared-bano"     class="pared-bano"     points="120,370 430,190 430,485 120,485"/>
+        <polygon id="pared-recamara" class="pared-recamara" points="431,190 465,166 817,372 817,485 431,485"/>
+        <rect    id="pared-sala"     class="pared-sala"     x="120" y="488" width="352" height="196"/>
+        <rect    id="pared-cocina"   class="pared-cocina"   x="474" y="488" width="342" height="196"/>
+      </g>
+
+      <!-- MUEBLES Y OBJETOS: se debe rellenar cuarto por cuarto -->
+      <g id="bano">     <!-- tina, lavabo, espejo, repisa -->
+
+         <!-- Repisa con toallas dobladas y frascos -->
+         <g id="repisa">
+          <rect class="blanco" x="202" y="364" width="82" height="4"/>
+          <rect class="toalla-blanca" x="207" y="337.5" width="34" height="7.5" rx="3.5"/>
+          <rect class="toalla-gris-1" x="207" y="345.8" width="34" height="7.5" rx="3.5"/>
+          <rect class="toalla-gris-2" x="207" y="354.2" width="34" height="7.5" rx="3.5"/>
+          <!-- 2 frascos y 1 vaso -->
+          <g class="blanco">
+            <path d="M241 344 h6 v1.5 h1 v15 h-8 v-15 h1Z"/>
+            <path d="M251 346.5 h6 v2 h1 v14 h-8 v-14 h1Z"/>
+            <path d="M261 348 h6 v1.5 h1 v13 h-8 v-13 h1Z"/>
+            <path d="M271 351 l6 0 l-1.3 12 h-3.4 Z"/>
+          </g>
+        </g>
+
+        <!-- Espejo: marco, vidrio y 3 reflejos diagonales -->
+        <g id="espejo-bano">
+          <rect class="blanco" x="308" y="317" width="85" height="80"/>
+          <rect class="vidrio-bano" x="314" y="322" width="73" height="69"/>
+          <g class="reflejo" clip-path="url(#recorte-espejo)">
+            <path d="M314 360 L345 322 h9 L314 369Z"/>
+            <path d="M314 378 L363 322 h9 L314 387Z"/>
+            <path d="M337 391 L387 335 v9 L346 391Z"/>
+          </g>
+        </g>
+        <clipPath id="recorte-espejo"><rect x="314" y="322" width="73" height="69"/></clipPath>
+
+        <!-- Mueble con lavabo: 2 gabinetes de 3 cajones + tarja tipo pedestal -->
+        <g id="mueble-bano">
+          <rect class="blanco" x="284" y="407" width="130" height="7" rx="2"/>
+          <rect class="blanco-suave" x="284" y="413" width="130" height="66"/>
+
+           <!-- gabinete izquierdo -->
+           <g id="cajones-izq-bano">
+            <rect class="cajon-bano" x="289" y="419" width="27" height="18"/>
+            <rect class="cajon-bano" x="289" y="440" width="27" height="18"/>
+            <rect class="cajon-bano" x="289" y="461" width="27" height="15"/>
+            <circle class="perilla-bano" cx="302.5" cy="428" r="1.6"/>
+            <circle class="perilla-bano" cx="302.5" cy="449" r="1.6"/>
+            <circle class="perilla-bano" cx="302.5" cy="468.5" r="1.6"/>
+          </g>
+          <!-- gabinete derecho (mismo dibujo que el izquierdo, reflejado) -->
+          <use href="#cajones-izq-bano" transform="translate(697 0) scale(-1 1)"/>
+
+          <!-- lavabo de pedestal -->
+          <path class="blanco" d="M320 413 h59 c0 12 -8 20 -20 22 v27 h10 v6 h-39 v-6 h10 v-27 c-12 -2 -20 -10 -20 -22Z"/>
+          <ellipse class="tina-sombra" cx="349.5" cy="415" rx="26" ry="4"/>
+        </g>
+
+        <!-- Tina con patas y llave: cuerpo tipo cápsula + óvalo del hueco + 4 patas -->
+        <g id="tina">
+          <ellipse class="blanco-suave" cx="150" cy="482" rx="6" ry="4"/>
+          <ellipse class="blanco-suave" cx="258" cy="482" rx="6" ry="4"/>
+          <ellipse class="blanco-suave" cx="168" cy="484" rx="5" ry="3.5"/>
+          <ellipse class="blanco-suave" cx="240" cy="484" rx="5" ry="3.5"/>
+          <rect class="blanco" x="136" y="425" width="136" height="52" rx="26"/>
+          <ellipse class="tina-sombra" cx="204" cy="429" rx="58" ry="9"/>
+          <!-- llave: tubo, mango en T y salida curva -->
+          <g class="grifo">
+            <rect x="225.5" y="399" width="3.5" height="24"/>
+            <rect x="219" y="396" width="16.5" height="3.5"/>
+            <path class="grifo-claro" d="M210 407 l9 -3.5 v7 Z"/>
+            <path class="grifo-claro" d="M235 400 C245 401 248 410 246 423 h-4 C244 412 241 405 235 404Z"/>
+          </g>
+        </g>
+
+      </g>
+
+      <g id="recamara"> <!-- cama, burós, lámparas, cuadros, ventana -->
+
+        <!-- Ventana de 4 vidrios, igual que la de la sala pero más grande -->
+        <g id="ventana-recamara">
+          <rect class="ventana-marco" x="436" y="265" width="82" height="113"/>
+          <rect class="vidrio" x="441" y="270" width="34" height="49"/>
+          <rect class="vidrio" x="479" y="270" width="34" height="49"/>
+          <rect class="vidrio" x="441" y="323" width="34" height="49"/>
+          <rect class="vidrio" x="479" y="323" width="34" height="49"/>
+        </g>
+
+        <!-- 3 cuadros de colores -->
+        <g id="cuadros-recamara">
+          <rect class="madera" x="538" y="326" width="44" height="43"/>
+          <rect class="cuadro-naranja" x="545" y="333" width="30" height="29"/>
+          <rect class="madera" x="601" y="326" width="44" height="43"/>
+          <rect class="cuadro-turquesa" x="608" y="333" width="30" height="29"/>
+          <rect class="madera" x="665" y="326" width="44" height="43"/>
+          <rect class="cuadro-rojo" x="672" y="333" width="30" height="29"/>
+        </g>
+
+        <!-- Cama: cabecera, sábana (una elipse que la mitad de abajo tapa) y colchón -->
+        <g id="cama">
+          <rect class="cabecera" x="555" y="399" width="166" height="41" rx="8"/>
+          <ellipse class="blanco" cx="638" cy="439" rx="83" ry="13"/>
+          <rect class="colchon" x="555" y="440" width="166" height="26"/>
+          <rect class="cabecera" x="555" y="466" width="166" height="8"/>
+          <rect class="cabecera" x="568" y="474" width="8" height="7"/>
+          <rect class="cabecera" x="700" y="474" width="8" height="7"/>
+        </g>
+
+        <!-- 2 burós con lámpara, uno a cada lado de la cama -->
+        <use href="#buro-noche" x="472" y="430"/>
+        <use href="#buro-noche" x="746" y="430"/>
+
+      </g>
+
+      <g id="sala">     <!-- librero, sillón, tele, cuadro, ventana -->
+
+        <!-- Librero -->
+        <g id="librero">
+          <rect class="madera-oscura" x="133" y="504" width="46" height="173"/>
+          <rect class="estante"  x="137" y="509" width="37" height="37"/>
+          <rect class="estante"  x="137" y="552" width="37" height="36"/>
+          <rect class="cajon"    x="137" y="594" width="37" height="36"/>
+          <rect class="cajon"    x="137" y="636" width="37" height="36"/>
+          <rect class="asa-cajon" x="149" y="610" width="13" height="4" rx="2"/>
+          <rect class="asa-cajon" x="149" y="652" width="13" height="4" rx="2"/>
+
+          <!-- Libros del estante de arriba (base en y=546). x, ancho, y (arriba) y alto -->
+          <g id="libros-arriba">
+            <rect class="libro-naranja"  x="137.3" y="517" width="4.7" height="29"/>
+            <rect class="libro-turquesa" x="142"   y="523" width="4"   height="23"/>
+            <rect class="libro-amarillo" x="146.3" y="514" width="3.7" height="32"/>
+            <rect class="libro-cafe"     x="150"   y="520" width="4"   height="26"/>
+            <rect class="libro-turquesa" x="154"   y="522" width="3.3" height="24"/>
+            <rect class="libro-amarillo" x="158"   y="517" width="4"   height="29"/>
+            <rect class="libro-naranja"  x="162.3" y="523" width="4.3" height="23"/>
+            <rect class="libro-turquesa" x="167"   y="514" width="3"   height="32"/>
+            <rect class="libro-amarillo" x="170"   y="519" width="4"   height="27"/>
+          </g>
+          <!-- Libros del estante de abajo (base en y=588) -->
+          <g id="libros-abajo">
+            <rect class="libro-amarillo" x="137.3" y="562" width="4"   height="26"/>
+            <rect class="libro-turquesa" x="141.3" y="556" width="3.4" height="32"/>
+            <rect class="libro-naranja"  x="144.7" y="565" width="4.6" height="23"/>
+            <rect class="libro-amarillo" x="149.3" y="559" width="4"   height="29"/>
+            <rect class="libro-turquesa" x="153.3" y="563" width="4"   height="25"/>
+            <rect class="libro-cafe"     x="157.3" y="561" width="4"   height="27"/>
+            <rect class="libro-amarillo" x="161.3" y="556" width="4"   height="32"/>
+            <rect class="libro-turquesa" x="165.3" y="565" width="4"   height="23"/>
+            <rect class="libro-naranja"  x="169.3" y="559" width="4.7" height="29"/>
+          </g>
+        </g>
+
+         <!-- Cuadro de paisaje: marco, vidrio (monte) y cielo con la silueta de las montañas -->
+         <g id="cuadro-sala">
+          <rect class="madera-oscura" x="213" y="515" width="113" height="61"/>
+          <rect class="cuadro-monte"  x="219" y="520" width="101" height="51"/>
+          <polygon class="cuadro-cielo" points="219,520 320,520 320,532.7 310,541.7 300.3,545 290.7,532 278.3,540 266.7,525 258.3,538.3 250.7,544.3 245.7,539 240,542.7 235,534 230,539.3 219,536"/>
+        </g>
+
+        <!-- Ventana: marco claro + 4 vidrios -->
+        <g id="ventana-sala">
+          <rect class="ventana-marco" x="368" y="507" width="76" height="59"/>
+          <rect class="vidrio" x="373.3" y="511"   width="30" height="23.3"/>
+          <rect class="vidrio" x="409"   y="511"   width="31" height="23.3"/>
+          <rect class="vidrio" x="373.3" y="539"   width="30" height="23.3"/>
+          <rect class="vidrio" x="409"   y="539"   width="31" height="23.3"/>
+        </g>
+
+        <!-- Mesa de la tele: tablero y dos patas inclinadas -->
+        <g id="mesa-tele">
+          <polygon class="madera-oscura" points="364.3,653 371.7,653 369.3,677.5 364.3,677.5"/>
+          <polygon class="madera-oscura" points="444,653 451,653 451,677.5 446,677.5"/>
+          <rect class="mesa-tablero" x="364" y="642" width="87" height="11"/>
+        </g>
+
+        <!-- Televisión: marco, pantalla, cuello, base, globo terráqueo y botón de play -->
+        <g id="tele">
+          <rect class="tele-marco" x="366" y="579" width="83" height="57" rx="5"/>
+          <rect id="pantalla-color" class="pantalla" x="369.3" y="582.3" width="76.4" height="50"/>
+          <rect class="tele-marco" x="396.7" y="635" width="22.3" height="6"/>
+          <rect class="tele-base"  x="389.3" y="640" width="36.7" height="2.5"/>
+          <g id="globo">
+            <circle class="globo-mar" cx="407.7" cy="606.7" r="21.7"/>
+            <g clip-path="url(#recorte-globo)">
+              <path class="continente" d="M392 598 C393 592 400 588 407 589 C412 587 419 589 424 593 C421 595 418 594 416 597 C413 599 410 597 407 599 C403 601 398 603 392 598Z"/>
+              <path class="continente" d="M403 613 C408 612 414 613 416 618 C415 622 412 625 409 628 C406 626 405 621 403 613Z"/>
+              <path class="continente" d="M420 601 C424 598 428 600 429 604 C427 608 424 611 421 610 C419 607 418 604 420 601Z"/>
+            </g>
+          </g>
+          <polygon class="negro" points="431.7,586 441,591.3 431.7,596.7"/>
+        </g>
+
+         <!-- Sillón: respaldo, asiento, brazos, patas, botones del respaldo y cojines -->
+         <g id="sillon">
+          <rect class="sillon"        x="207" y="597" width="125" height="43" rx="11"/>
+          <rect class="sillon-sombra" x="207" y="638" width="125" height="15"/>
+          <rect class="sillon-frente" x="207" y="653" width="125" height="21"/>
+          <rect class="sillon" x="184" y="623" width="26" height="51" rx="10"/>
+          <rect class="sillon" x="330" y="623" width="26" height="51" rx="10"/>
+          <rect class="negro"  x="191" y="674" width="17" height="3.5"/>
+          <rect class="negro"  x="332" y="674" width="17" height="3.5"/>
+          <!-- botones (cruces) del respaldo -->
+          <path class="boton-sillon" d="M230.7 615 h10 M235.7 610 v10 M264 615 h10 M269 610 v10 M298.7 615 h10 M303.7 610 v10"/>
+          <!-- Cojín izquierdo y su reflejo a la derecha (el eje del reflejo es x = 270) -->
+          <use href="#cojin"/>
+          <use href="#cojin" transform="translate(540 0) scale(-1 1)"/>
+        </g>
+
+      </g>
+
+      <g id="cocina">   <!-- gabinetes, tarja, refrigerador, ventana -->
+
+        <!-- 4 gabinetes altos (el segundo es más corto para dejar espacio a la tarja) -->
+        <g id="gabinetes-altos">
+          <rect class="gabinete" x="478" y="495" width="38" height="66"/>
+          <rect class="linea-gabinete" x="486" y="547" width="22" height="3"/>
+
+          <rect class="gabinete" x="518" y="495" width="48" height="36"/>
+          <rect class="linea-gabinete" x="530" y="518" width="24" height="3"/>
+
+          <rect class="gabinete" x="568" y="495" width="94" height="66"/>
+          <rect class="linea-gabinete" x="590" y="547" width="50" height="3"/>
+
+          <rect class="gabinete" x="755" y="495" width="49" height="66"/>
+          <rect class="linea-gabinete" x="766" y="547" width="27" height="3"/>
+        </g>
+
+         <!-- Tarja empotrada con llave tipo cuello de cisne -->
+         <g id="tarja">
+          <rect class="gabinete" x="533" y="592" width="78" height="21" rx="4"/>
+          <g class="grifo-cocina">
+            <rect x="570" y="578" width="4" height="26"/>
+            <path d="M568,578 C568,566 582,565 582,576 L582,590" class="grifo-cocina-trazo"/>
+            <rect x="563" y="602" width="17" height="4" rx="1.5"/>
+          </g>
+        </g>
+
+        <!-- Cubierta blanca a todo lo ancho -->
+        <rect class="gabinete" x="474" y="607" width="342" height="7"/>
+
+         <!-- 4 gabinetes bajos: izquierdo, central de 2 puertas, derecho (junto al refri) y el del extremo -->
+         <g id="gabinetes-bajos">
+          <rect class="gabinete" x="474" y="614" width="58" height="59"/>
+          <rect class="linea-gabinete" x="489" y="631" width="28" height="3"/>
+
+          <rect class="gabinete" x="533" y="614" width="79" height="59"/>
+          <line class="linea-gabinete-trazo" x1="572.5" y1="616" x2="572.5" y2="673"/>
+          <circle class="perilla-cocina" cx="558" cy="638" r="2.2"/>
+          <circle class="perilla-cocina" cx="587" cy="638" r="2.2"/>
+
+          <rect class="gabinete" x="613" y="614" width="49" height="59"/>
+          <rect class="linea-gabinete" x="625" y="631" width="26" height="3"/>
+
+          <rect class="gabinete" x="756" y="614" width="53" height="59"/>
+          <rect class="linea-gabinete" x="769" y="631" width="28" height="3"/>
+        </g>
+
+         <!-- Refrigerador: cuerpo, manija, línea divisoria y base -->
+         <g id="refrigerador">
+          <rect class="refrigerador" x="663" y="553" width="94" height="119" rx="14"/>
+          <rect class="refri-detalle" x="663" y="600" width="94" height="3"/>
+          <rect class="refri-detalle" x="668" y="563" width="5" height="45" rx="2.5"/>
+          <rect class="refri-base" x="667" y="669" width="86" height="4"/>
+        </g>
+
+      </g>
+
+      <!-- ESTRUCTURA: madera que bordea la estructura, va encima de los interiores. -->
+      <g id="estructura" class="madera">
+        <!-- Techo -->
+        <polyline class="techo" points="93,383 465,161 837,383"/>
+        <!-- Paredes verticales -->
+        <rect x="114" y="375" width="13" height="315"/>  <!-- pared izquierda -->
+        <rect x="810" y="370" width="12" height="320"/>  <!-- pared derecha -->
+        <rect x="424" y="185" width="13" height="300"/>  <!-- división del piso alto -->
+        <rect x="468" y="485" width="12" height="205"/>  <!-- división de la planta baja -->
+        <!-- Pisos horizontales -->
+        <rect x="114" y="482" width="708" height="13"/>  <!-- entrepiso -->
+        <rect x="114" y="678" width="708" height="12"/>  <!-- piso de la planta baja -->
+      </g>
+
+      <!-- EXTERIOR: puerta y barda, cosas que tengan que quedar delante de la casa -->
+      <g id="exterior">
+
+        <g id="puerta">
+          <rect class="puerta" x="823" y="502" width="72" height="174"/>
+          <rect class="puerta-panel" x="832" y="511" width="19" height="82" rx="9.5"/>
+          <rect class="puerta-panel" x="866" y="511" width="20" height="82" rx="9.5"/>
+          <rect class="puerta-panel" x="832" y="621" width="19" height="48" rx="9.5"/>
+          <rect class="puerta-panel" x="866" y="621" width="20" height="48" rx="9.5"/>
+          <circle class="puerta-perilla" cx="888" cy="606" r="2.5"/>
+        </g>
+
+        <!-- Barda de madera, a la derecha de la puerta -->
+        <g id="barda">
+          <!-- Travesaños (van detrás de las tablas) -->
+          <rect class="barda-riel" x="895" y="625" width="108" height="8"/>
+          <rect class="barda-riel" x="895" y="662" width="108" height="8"/>
+
+          <!-- 5 tablas altas y 1 corta al final -->
+          <use href="#tabla-alta"  class="barda" transform="translate(897 598)"/>
+          <use href="#tabla-alta"  class="barda" transform="translate(915 598)"/>
+          <use href="#tabla-alta"  class="barda" transform="translate(933 598)"/>
+          <use href="#tabla-alta"  class="barda" transform="translate(951 598)"/>
+          <use href="#tabla-alta"  class="barda" transform="translate(969 598)"/>
+          <use href="#tabla-corta" class="barda" transform="translate(987 628)"/>
+        </g>
+      </g>
+
+      <!-- PERSONAJES: estos van al final para que no queden atras de la estructura -->
+      <!--
+        Los personajes son imágenes fáciles de reemplazar: se cambia el archivo en /img
+        o se edita el "href".
+
+        Los PNG originales traen relleno transparente alrededor del personaje, así que el ancho/alto no
+        guarda la proporción exacta del archivo; preserveAspectRatio="none" fuerza
+        que ocupen la medida real de la foto en vez de dejar espacio vacío (por eso
+        algunos personajes se ven un poco estirados).
+      -->
+      <g id="personajes">
+        <image id="personaje-papa" href="img/papa.png"  x="240" y="508" width="64" height="167" preserveAspectRatio="none"/>
+        <image id="personaje-mama" href="img/mama.png"  x="522" y="320" width="71" height="159" preserveAspectRatio="none"/>
+        <image href="img/perro.png" x="826" y="610" width="68" height="65"  preserveAspectRatio="none"/>
+
+        <!-- El niño lleva a la sección de ahorro de agua -->
+        <a id="personaje-nino" href="ahorro.html" aria-label="Ir a la sección de ahorro de agua">
+          <image href="img/nino_cuerpo.png" x="365" y="373" width="65" height="112"
+                 preserveAspectRatio="none" style="cursor:pointer"/>
+        </a>
+
+        <a id="personaje-nina" href="rutadelagua.html" aria-label="Ir a la ruta del agua">
+          <image href="img/cuerpo_nina.png" x="730" y="540" width="70" height="145"
+                preserveAspectRatio="none" style="cursor:pointer"/>
+        </a>
+      </g>
+
+      <!-- DIÁLOGOS: globos que aparecen al pasar el cursor sobre cada personaje -->
+      <g id="dialogos">
+
+        <!-- Niño -->
+        <g id="dialogo-nino" class="dialogo" transform="translate(185 262)">
+          <path class="globo" d="M12 0 H178 Q190 0 190 12 V46 Q190 58 178 58 H160 L203 106 L135 58 H12 Q0 58 0 46 V12 Q0 0 12 0 Z"/>
+          <foreignObject x="6" y="3" width="178" height="52">
+            <div class="dialogo-texto">Hola, juguemos y aprendamos 10 sencillas acciones para ahorrar agua.</div>
+          </foreignObject>
+        </g>
+
+        <!-- Mamá -->
+        <g id="dialogo-mama" class="dialogo" transform="translate(530 200)">
+          <path class="globo" d="M14 0 H201 Q215 0 215 14 V98 Q215 112 201 112 H66 L40 132 L40 112 H14 Q0 112 0 98 V14 Q0 0 14 0 Z"/>
+          <foreignObject x="8" y="4" width="199" height="104">
+            <div class="dialogo-texto dialogo-largo">Nosotros les hemos enseñado a nuestros hijos cómo cuidar el agua, para que nunca nos falte. Por eso les enseñamos también que debemos pagar a tiempo los servicios de agua, alcantarillado, tratamiento de aguas residuales y reúso de las aguas tratadas.</div>
+          </foreignObject>
+        </g>
+
+        <!-- Papá -->
+        <g id="dialogo-papa" class="dialogo" transform="translate(200 426)">
+          <path class="globo" d="M12 0 H173 Q185 0 185 12 V44 Q185 56 173 56 H120 L77 96 L95 56 H12 Q0 56 0 44 V12 Q0 0 12 0 Z"/>
+          <foreignObject x="6" y="3" width="173" height="50">
+            <div class="dialogo-texto">Checa este video sobre la importancia del agua en el mundo, el país y nuestro estado.</div>
+          </foreignObject>
+        </g>
+
+        <!-- Niña -->
+        <g id="dialogo-nina" class="dialogo" transform="translate(622 498)">
+          <path class="globo" d="M12 0 H138 Q150 0 150 12 V32 Q150 44 138 44 H135 L150 56 L110 44 H12 Q0 44 0 32 V12 Q0 0 12 0 Z"/>
+          <foreignObject x="6" y="2" width="138" height="40">
+            <div class="dialogo-texto">Hola, acompáñame a ver la ruta del agua.</div>
+          </foreignObject>
+        </g>
+
+        <!-- Tele -->
+        <g id="dialogo-tele" class="dialogo" transform="translate(395 515)">
+          <path class="globo" d="M12 0 H158 Q170 0 170 12 V40 Q170 52 158 52 H62 L28 68 L38 52 H12 Q0 52 0 40 V12 Q0 0 12 0 Z"/>
+          <foreignObject x="6" y="3" width="158" height="46">
+            <div class="dialogo-texto">Ver video de la importancia del agua</div>
+          </foreignObject>
+        </g>
+
+      </g>
+    </svg>
+  </main>
+
+  <!-- Mini reproductor: se abre al hacer clic en la tele -->
+  <div class="visor oculta" id="visor" role="dialog" aria-modal="true" aria-label="Video de la importancia del agua">
+    <div class="visor-caja">
+      <button class="visor-cerrar" id="visor-cerrar" aria-label="Cerrar video">✕</button>
+      <div class="visor-video" id="visor-video"></div>
+    </div>
+  </div>
+
+  <!-- Música de fondo: ▶ = apagada, bocina = sonando (al presionarla se silencia) -->
+  <button class="btn-musica" id="btn-musica" aria-label="Activar música de fondo" aria-pressed="false">
+    <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8 5 L19 12 L8 19 Z" fill="#E3262B" stroke="#E3262B" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+    <svg class="ico-bocina" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 9 h4 l5 -4 v14 l-5 -4 h-4 z" fill="#E3262B" stroke="#E3262B" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M15 9.5 l5 5 M20 9.5 l-5 5" stroke="#E3262B" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="js/nubes.js"></script>
+
+  <script src="js/tele.js"></script>
+  <script src="js/audios.js"></script>
 </body>
-
 </html>
