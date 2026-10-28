@@ -1,0 +1,362 @@
+/* ---------- Paleta de colores de la casa ---------- */
+:root {
+  --cielo:         #ABDFFF;
+  --madera:        #A46B42;
+  --pasto:         #63B85B;
+  --pared-bano:    #53D7DC;
+  --pared-recamara:#C9DDE1;
+  --pared-sala:    #F6F0EE;
+  --pared-cocina:  #D3C6B8;
+  --puerta:        #57141A;
+  --puerta-panel:  #87313A;
+  --puerta-perilla:#D56975;
+
+  /* Sala */
+  --madera-oscura: #5C4237;
+  --estante:       #EDEAE5;
+  --cajon:         #DCCDB5;
+  --asa-cajon:     #C8B191;
+  --libro-naranja: #FC6533;
+  --libro-turquesa:#25B7B7;
+  --libro-amarillo:#EDB63E;
+  --libro-cafe:    #A46B42;
+  --cuadro-cielo:  #C0F1F8;
+  --cuadro-monte:  #8BE8F0;
+  --ventana-marco: #FCFAF7;
+  --vidrio:        #CBE5F6;
+  --mesa-tablero:  #9F9284;
+  --tele-marco:    #373633;
+  --tele-base:     #2B2A28;
+  --pantalla:      #33CCFF;
+  --globo-mar:     #FFFFFF;
+  --continente:    #0D869C;
+  --sillon:        #555658;
+  --sillon-sombra: #414143;
+  --sillon-frente: #6B6D6F;
+  --boton-sillon:  #47484A;
+  --cojin:         #A51833;
+  --cojin-luz:     #D18B9A;
+  --negro:         #0E0E0E;
+
+  /* Baño */
+  --blanco:        #FFFFFF;
+  --blanco-suave:  #EAF2F2;
+  --toalla-blanca: #FFFFFF;
+  --toalla-gris-1: #CDF0F2;
+  --toalla-gris-2: #98E7EA;
+  --vidrio-bano:   #CDEEF0;
+  --reflejo:       #FFFFFF;
+  --cajon-bano:    #F7FAFA;
+  --perilla-bano:  #98E7EA;
+  --tina-sombra:   #F2FAFA;
+  --grifo:         #1E7A78;
+  --grifo-claro:   #EAE7E5;
+
+  /* Recámara */
+  --cuadro-naranja:  #F8B450;
+  --cuadro-turquesa: #3FDCD7;
+  --cuadro-rojo:     #FC6533;
+  --cabecera:        #5C4237;
+  --colchon:         #9F9284;
+  --buro:            #C8B7A6;
+  --cajon-buro-noche:#BBA88F;
+  --pantalla-lampara:#25B7B7;
+
+   /* Cocina */
+  --gabinete:        #FFFFFF;
+  --linea-gabinete:  #E7D8D5;
+  --grifo-cocina:    #9AA3A6;
+  --perilla-cocina:  #E7D8D5;
+  --refrigerador:    #562B87;
+  --refri-detalle:   #E1DFE0;
+  --refri-base:      #334A52;
+
+    /* Exterior o Fondo*/
+    --nube:          #FFFFFF;
+    --arbol-oscuro:  #8CC63F;
+    --arbol-claro:   #A3D84F;
+    --titulo-nube:   #0D4A8C;
+    --barda:         #F0A257;
+    --barda-riel:    #D98640;
+
+      /* Diálogos */
+    --globo-fondo:   #3A7CA5;
+    --globo-borde:   #1F4E79;
+}
+
+/* ---------- Página ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--cielo);
+  overflow-x: hidden;
+}
+
+main {
+  display: grid;
+  place-items: end center;
+  min-height: 100vh;
+}
+
+/* El SVG se ajusta solo al ancho de la ventana sin deformarse (gracias al viewBox) */
+#escena {
+  display: block;
+  width: 100%;
+  max-width: 1024px;
+  height: auto;
+  overflow: visible;
+}
+
+/* ---------- Piezas de la casa ---------- */
+.pasto          { fill: var(--pasto); }
+.pared-bano     { fill: var(--pared-bano); }
+.pared-recamara { fill: var(--pared-recamara); }
+.pared-sala     { fill: var(--pared-sala); }
+.pared-cocina   { fill: var(--pared-cocina); }
+.puerta         { fill: var(--puerta); }
+.puerta-panel   { fill: var(--puerta-panel); }
+.puerta-perilla { fill: var(--puerta-perilla); }
+
+.madera         { fill: var(--madera); }
+.techo {
+  fill: none;                 /* es una línea, no un área */
+  stroke: var(--madera);
+  stroke-width: 16;
+  stroke-linejoin: miter;     /* punta afilada arriba, como el original */
+}
+
+/* ---------- Sala ---------- */
+.madera-oscura  { fill: var(--madera-oscura); }
+.estante        { fill: var(--estante); }
+.cajon          { fill: var(--cajon); }
+.asa-cajon      { fill: var(--asa-cajon); }
+.libro-naranja  { fill: var(--libro-naranja); }
+.libro-turquesa { fill: var(--libro-turquesa); }
+.libro-amarillo { fill: var(--libro-amarillo); }
+.libro-cafe     { fill: var(--libro-cafe); }
+.cuadro-cielo   { fill: var(--cuadro-cielo); }
+.cuadro-monte   { fill: var(--cuadro-monte); }
+.ventana-marco  { fill: var(--ventana-marco); }
+.vidrio         { fill: var(--vidrio); }
+.mesa-tablero   { fill: var(--mesa-tablero); }
+.tele-marco     { fill: var(--tele-marco); }
+.tele-base      { fill: var(--tele-base); }
+.pantalla       { fill: var(--pantalla); }
+.globo-mar {
+  fill: var(--globo-mar);
+  stroke: var(--continente);
+  stroke-width: 1.5;
+}
+.continente     { fill: var(--continente); }
+.sillon         { fill: var(--sillon); }
+.sillon-sombra  { fill: var(--sillon-sombra); }
+.sillon-frente  { fill: var(--sillon-frente); }
+.boton-sillon   { fill: none; stroke: var(--boton-sillon); stroke-width: 1.2; }
+.cojin          { fill: var(--cojin); }
+.cojin-luz      { fill: var(--cojin-luz); }
+.negro          { fill: var(--negro); }
+
+/* ---------- Baño ---------- */
+.blanco         { fill: var(--blanco); }
+.blanco-suave   { fill: var(--blanco-suave); }
+.toalla-blanca  { fill: var(--toalla-blanca); }
+.toalla-gris-1  { fill: var(--toalla-gris-1); }
+.toalla-gris-2  { fill: var(--toalla-gris-2); }
+.vidrio-bano    { fill: var(--vidrio-bano); }
+.reflejo        { fill: var(--reflejo); opacity: 0.35; }
+.cajon-bano     { fill: var(--cajon-bano); }
+.perilla-bano   { fill: var(--perilla-bano); }
+.tina-sombra    { fill: var(--tina-sombra); }
+.grifo          { fill: var(--grifo); }
+.grifo-claro    { fill: var(--grifo-claro); }
+
+/* ---------- Recámara ---------- */
+.cuadro-naranja  { fill: var(--cuadro-naranja); }
+.cuadro-turquesa { fill: var(--cuadro-turquesa); }
+.cuadro-rojo     { fill: var(--cuadro-rojo); }
+.cabecera        { fill: var(--cabecera); }
+.colchon         { fill: var(--colchon); }
+.buro            { fill: var(--buro); }
+.cajon-buro-noche{ fill: var(--cajon-buro-noche); stroke: var(--madera-oscura); stroke-width: 1; }
+.pantalla-lampara{ fill: var(--pantalla-lampara); }
+
+/* ---------- Cocina ---------- */
+.gabinete           { fill: var(--gabinete); }
+.linea-gabinete      { fill: var(--linea-gabinete); }
+.linea-gabinete-trazo{ stroke: var(--linea-gabinete); stroke-width: 2; }
+.grifo-cocina        { fill: var(--grifo-cocina); }
+.grifo-cocina-trazo  { fill: none; stroke: var(--grifo-cocina); stroke-width: 3.5; }
+.perilla-cocina      { fill: var(--perilla-cocina); }
+.refrigerador        { fill: var(--refrigerador); }
+.refri-detalle       { fill: var(--refri-detalle); }
+.refri-base          { fill: var(--refri-base); }
+
+/* ---------- Exterior o Fondo: Nubes, Arboles y Barda ---------- */
+.nube         { fill: var(--nube); }
+.arbol-oscuro { fill: var(--arbol-oscuro); }
+.arbol-claro  { fill: var(--arbol-claro); }
+
+.titulo-nube {
+  fill: var(--titulo-nube);
+  font-family: "Arial Black", Impact, system-ui, sans-serif;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.barda       { fill: var(--barda); }
+.barda-riel  { fill: var(--barda-riel); }
+
+/* ---------- Diálogos de los personajes ---------- */
+.dialogo {
+  opacity: 0;
+  pointer-events: none;          /* para que el globo no estorbe ni parpadee al pasar el cursor */
+  transition: opacity .2s ease;
+}
+
+.globo {
+  fill: var(--globo-fondo);
+  stroke: var(--globo-borde);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.dialogo-texto {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #FFFFFF;
+  font: 700 11px/1.25 system-ui, "Segoe UI", sans-serif;
+}
+
+.dialogo-largo {
+  font-size: 10px;
+}
+
+/* Mostrar el globo cuando el cursor está sobre su personaje */
+#personajes:has(#personaje-nino:hover) ~ #dialogos #dialogo-nino,
+#personajes:has(#personaje-mama:hover) ~ #dialogos #dialogo-mama,
+#personajes:has(#personaje-papa:hover) ~ #dialogos #dialogo-papa,
+#personajes:has(#personaje-nina:hover) ~ #dialogos #dialogo-nina {
+  opacity: 1;
+}
+
+/* ---------- Zoom al pasar el cursor ---------- */
+#personaje-nino,
+#personaje-nina,
+#tele {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: transform .2s ease;
+}
+
+#tele { cursor: pointer; }
+
+#personaje-nino:hover,
+#personaje-nina:hover { transform: scale(1.08); }
+
+#tele:hover { transform: scale(1.12); }
+
+@media (prefers-reduced-motion: reduce) {
+  #personaje-nino, #personaje-nina, #tele { transition: none; }
+}
+
+/* Globo de la tele al pasar el cursor */
+#escena:has(#tele:hover) #dialogo-tele {
+  opacity: 1;
+}
+
+/* Cambio de color suave en la pantalla */
+.pantalla {
+  transition: fill .3s ease;
+}
+
+/* ---------- Mini reproductor de video ---------- */
+.visor {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(1, 30, 40, .8);
+}
+
+.visor.oculta { display: none; }
+
+.visor-caja {
+  position: relative;
+  width: min(900px, 100%);
+  animation: visor-aparecer .25s ease-out;
+}
+
+.visor-video {
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+}
+
+.visor-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Botón de cerrar: mismo estilo blanco con borde rojo de los botones de la ruta */
+.visor-cerrar {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  z-index: 1;
+  width: 46px;
+  height: 46px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #E3262B;
+  background: #FFFFFF;
+  border: 3px solid #E3262B;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+}
+
+.visor-cerrar:hover { background: #FFE9E9; }
+
+@keyframes visor-aparecer {
+  from { transform: scale(.9); opacity: 0; }
+  to   { transform: scale(1);  opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .visor-cerrar { top: -16px; right: -8px; }
+}
+
+/* ---------- Botón de música ---------- */
+.btn-musica {
+  position: fixed;
+  left: 200px;
+  bottom: 50px;
+  z-index: 50;
+  width: 64px;
+  height: 64px;
+  padding: 10px;
+  background: #FFFFFF;
+  border: 4px solid #E3262B;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+  transition: transform .15s;
+}
+
+.btn-musica:hover { transform: scale(1.08); }
+
+.btn-musica svg { width: 100%; height: 100%; display: block; }
+
+/* Apagada: se ve la flecha. Sonando: se ve la bocina. */
+.btn-musica .ico-bocina { display: none; }
+.btn-musica[aria-pressed="true"] .ico-play   { display: none; }
+.btn-musica[aria-pressed="true"] .ico-bocina { display: block; }

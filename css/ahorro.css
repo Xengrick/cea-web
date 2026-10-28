@@ -1,0 +1,510 @@
+/* ---------- Paleta ---------- */
+:root {
+  --fondo-oscuro:   #016B84;
+  --fondo-tablero:  #01879E;
+  --texto-claro:    #FFFFFF;
+  --acento:         #FF9A98;
+  --acierto:        #6FCF97;
+  --circulo-borde:  rgba(255, 255, 255, 0.5);
+  --celeste:        #A9F6F4;
+  --mensaje-fondo:  #B71F2D;
+  --texto-oscuro:   #0A4A5C;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo-oscuro);
+  color: var(--texto-claro);
+  font-family: system-ui, "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+
+/* ---------- Encabezado ---------- */
+.barra-titulo {
+  background: var(--celeste);
+  color: var(--texto-oscuro);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;   /* botón | título centrado | logo */
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+}
+
+.barra-titulo h1 {
+  font-size: 1.6rem;
+  margin: 0;
+  text-align: center;
+}
+
+.numero-destacado {
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.boton-inicio {
+  justify-self: start;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  padding: 10px;
+  background: #FFFFFF;
+  border: 4px solid #E3262B;
+  border-radius: 14px;
+  box-shadow: 0 3px 8px rgba(0,0,0,.3);
+  transition: transform .15s;
+}
+
+.boton-inicio:hover { transform: scale(1.06); }
+
+.boton-inicio svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.logo {
+  justify-self: end;
+  height: 56px;
+  width: auto;
+}
+
+/* ---------- Layout principal ---------- */
+.juego {
+  display: grid;
+  grid-template-columns: 1fr 260px;      /* tablero a la izquierda, panel a la derecha */
+  grid-template-rows: auto auto;
+  gap: 24px;
+  padding: 24px;
+}
+
+.bandeja {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.panel-marcador {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  text-align: center;
+}
+
+.instrucciones {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--celeste);
+}
+
+.marcador {
+  margin-top: 16px;
+  background: var(--fondo-tablero);
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.marcador-etiqueta {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--celeste);
+}
+
+.marcador-valor {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--acento);
+}
+
+.planeta {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  margin: 16px auto;
+}
+
+/* ---------- Tablero: una tarjeta por acción ---------- */
+.tablero {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.tarjeta-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--fondo-tablero);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+
+.circulo-destino {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px dashed var(--circulo-borde);
+  display: grid;
+  place-items: center;
+  transition: border-color .2s, background .2s;
+}
+
+.circulo-destino.sobre-arrastre {
+  border-color: var(--texto-claro);
+  background: rgba(255,255,255,.12);
+}
+
+.circulo-destino.acertado {
+  border-style: solid;
+  border-color: var(--acierto);
+  background: rgba(111, 207, 151, .2);
+}
+
+.tarjeta-meta p {
+  margin: 0;
+  font-size: .95rem;
+  line-height: 1.35;
+}
+
+/* ---------- Bandeja de fichas arrastrables ---------- */
+.bandeja {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(0,0,0,.15);
+  border-radius: 14px;
+  min-height: 96px;
+}
+
+.ficha {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--texto-claro);
+  display: grid;
+  place-items: center;
+  cursor: grab;
+  box-shadow: 0 3px 8px rgba(0,0,0,.3);
+  touch-action: none;
+  user-select: none;
+}
+
+.ficha.arrastrando {
+  position: fixed;
+  z-index: 50;
+  cursor: grabbing;
+  transform: scale(1.1);
+  box-shadow: 0 8px 18px rgba(0,0,0,.4);
+}
+
+.ficha.colocada {
+  cursor: default;
+  box-shadow: none;
+}
+
+.ficha.fallo {
+  animation: sacudir .4s;
+}
+
+@keyframes sacudir {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* ---------- Mensaje de fallo ---------- */
+.mensaje-fallo {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(1, 45, 56, .75);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.mensaje-fallo.oculta {
+  display: none;
+}
+
+.mensaje-caja {
+  position: relative;
+  background: var(--mensaje-fondo);
+  border-radius: 40px;
+  padding: 36px 48px;
+  max-width: 680px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  animation: aparecer .25s ease-out;
+}
+
+.mensaje-caja p {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--texto-claro);
+}
+
+.mensaje-cerrar {
+  position: absolute;
+  top: -22px;
+  right: -22px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 4px solid var(--texto-oscuro);
+  background: var(--celeste);
+  color: var(--texto-oscuro);
+  font-size: 1.6rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.mensaje-cerrar:hover {
+  background: #FFFFFF;
+}
+
+@keyframes aparecer {
+  from { transform: scale(.85); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+  .juego {
+    grid-template-columns: 1fr;
+  }
+  .panel-marcador { grid-column: 1; grid-row: 1; }
+  .tablero        { grid-column: 1; grid-row: 2; }
+  .bandeja        { grid-column: 1; grid-row: 3; }
+  .planeta        { max-width: 140px; }
+  .barra-titulo h1 { font-size: 1.1rem; }
+  .logo           { height: 40px; }
+
+  .mensaje-caja { padding: 24px 28px; border-radius: 28px; }
+  .mensaje-caja p { font-size: 1.4rem; }
+}
+
+/* ---------- Ficha con ilustración ---------- */
+.ficha.con-imagen {
+  background: none;
+  box-shadow: none;
+}
+.ficha.con-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;      /* para que el arrastre lo reciba la ficha, no la imagen */
+}
+
+/* ---------- Mensaje de éxito ---------- */
+.mensaje-exito {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(1, 45, 56, .75);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.mensaje-exito.oculta { display: none; }
+
+.exito-caja {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: min(860px, 100%);
+  min-height: 190px;
+  margin-left: 40px;
+  padding: 28px 48px 28px 0;
+  background: #7FE0DE;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  animation: aparecer .25s ease-out;
+}
+
+/* Doble borde interior, como en el original */
+.exito-caja::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 3px solid #0A5A6B;
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+/* La ilustración sale por arriba y por abajo de la caja */
+.exito-imagen {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 300px;
+  height: auto;
+  margin: -70px 0 -50px -40px;
+}
+
+.exito-texto {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--texto-oscuro);
+}
+.exito-texto .destacado { color: #FF6F91; }
+
+@media (max-width: 720px) {
+  .exito-caja { flex-direction: column; margin-left: 0; padding: 20px 28px 28px; text-align: center; }
+  .exito-imagen { width: 200px; margin: -60px 0 0; }
+  .exito-texto { font-size: 1.4rem; }
+}
+
+/* ---------- Pantalla de calificación perfecta ---------- */
+.pantalla-perfecta {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(1, 45, 56, .92);
+  overflow: hidden;
+}
+.pantalla-perfecta.oculta { display: none; }
+
+/* Escena central con proporción fija; todo se coloca en porcentajes */
+.perfecta-escena {
+  position: relative;
+  width: min(980px, 96vw);
+  aspect-ratio: 2 / 1;
+}
+
+.perfecta-tarjeta {
+  position: absolute;
+  left: 22%;
+  right: 14%;
+  top: 14%;
+  bottom: 12%;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: .3em;
+  padding: 0 6%;
+  text-align: center;
+  background: #D4ECEF;
+  border: .5vmin solid #FF9A98;
+  border-radius: 6px;
+  color: var(--texto-oscuro);
+}
+.perfecta-litros   { margin: 0; font-size: clamp(1.8rem, 5vw, 3.6rem); font-weight: 800; color: #FF8A8A; }
+.perfecta-texto    { margin: 0; font-size: clamp(1rem, 2.6vw, 2rem); font-weight: 800; line-height: 1.15; }
+.perfecta-aciertos { margin: 0; font-size: clamp(1.1rem, 3vw, 2.2rem); font-weight: 800; }
+.perfecta-aciertos span { color: #FF8A8A; }
+
+/* Trofeo a la izquierda, sobresale de la tarjeta */
+.perfecta-trofeo {
+  position: absolute;
+  left: 0;
+  top: -4%;
+  width: 40%;
+  height: auto;
+}
+
+/* Tubo a la derecha, sobresale por arriba y por abajo */
+.perfecta-tubo {
+  position: absolute;
+  right: 3%;
+  top: 28%;
+  width: 17%;
+  height: auto;
+}
+
+/* Botón de reiniciar (círculo rosa) */
+.perfecta-reiniciar {
+  position: absolute;
+  right: 11%;
+  top: 2%;
+  width: 11%;
+  aspect-ratio: 1;
+  padding: 2.2%;
+  background: #FF9A98;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 .8vmin #FFD0CF;
+  cursor: pointer;
+  transition: transform .15s;
+}
+.perfecta-reiniciar:hover { transform: rotate(-40deg) scale(1.05); }
+.perfecta-reiniciar svg { width: 100%; height: 100%; display: block; }
+
+@media (max-width: 720px) {
+  .perfecta-escena { aspect-ratio: 1 / 1.1; }
+  .perfecta-tarjeta { left: 4%; right: 4%; top: 30%; bottom: 8%; }
+  .perfecta-trofeo { width: 45%; left: 2%; top: -2%; }
+  .perfecta-tubo { width: 24%; right: 2%; top: 4%; }
+  .perfecta-reiniciar { right: 28%; top: 2%; width: 14%; }
+}
+
+/* ---------- Pantalla de resultado excelente ---------- */
+.excelente-tarjeta {
+  left: 24%;
+  right: 6%;
+  top: 25%;
+  bottom: 13%;
+  padding: 0 4% 0 14%;      /* el espacio de la izquierda es para el tubo */
+  border-radius: 3vmin;
+}
+
+.excelente-aciertos {
+  justify-self: end;
+  margin-right: -2%;
+}
+
+/* Tubo a la izquierda, sobresale por arriba y por abajo de la tarjeta */
+.excelente-tubo {
+  position: absolute;
+  left: 8%;
+  top: 6%;
+  height: 93%;
+  width: auto;
+}
+
+@media (max-width: 720px) {
+  .excelente-tarjeta { left: 4%; right: 4%; top: 34%; bottom: 6%; padding: 0 5%; }
+  .excelente-tubo { left: 2%; top: -4%; height: 40%; }
+}
+
+/* Tubo de la pantalla intermedia: un poco más a la derecha, con la mano sobre la tarjeta */
+.intermedia-tubo {
+  left: 12%;
+  top: 4%;
+  height: 95%;
+}
+
+@media (max-width: 720px) {
+  .intermedia-tubo { left: 2%; top: -4%; height: 40%; }
+}
+
+/* Tubo de la pantalla de resultado bajo: con los brazos abiertos, se ve más ancho */
+.insatisfactoria-tubo {
+  left: 5%;
+  top: 2%;
+  height: 96%;
+}
+
+@media (max-width: 720px) {
+  .insatisfactoria-tubo { left: 0; top: -4%; height: 40%; }
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ahorra agua con estas 10 sencillas acciones</title>
+  <link rel="stylesheet" href="css/ahorro.css">
+</head>
+<body>
+
+  <!-- Íconos reutilizables (se dibujan una vez y se colocan con <use>) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="ico-reiniciar" viewBox="0 0 24 24">
+      <path d="M12 5 a7 7 0 1 1 -6.6 4.7" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M12 1.5 L7 5.2 L12 8.9 Z" fill="#FFFFFF"/>
+    </symbol>
+  </svg>
+
+  <header class="barra-titulo">
+    <a class="boton-inicio" href="index.html" aria-label="Volver al inicio">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3 L2.5 11.5 H5 V21 H19 V11.5 H21.5 Z" fill="#E3262B" stroke="#E3262B" stroke-width="1.5" stroke-linejoin="round"/>
+        <rect x="16" y="5" width="2.6" height="4.5" fill="#E3262B"/>
+        <rect x="8.2" y="13" width="3.4" height="8.7" fill="#FFFFFF"/>
+        <rect x="13.2" y="13" width="3.6" height="3.6" fill="#FFFFFF"/>
+      </svg>
+    </a>
+    <h1>Ahorra agua con estas <span class="numero-destacado">10</span> sencillas acciones</h1>
+    <img class="logo" src="img/logo.png" alt="CEABC, Comisión Estatal del Agua">
+  </header>
+
+  <main class="juego">
+
+    <!-- Columna derecha: instrucciones + marcadores + planeta -->
+    <aside class="panel-marcador">
+      <p class="instrucciones">Lee cada acción y arrastra hasta ahí la imagen que le corresponde.</p>
+
+      <div class="marcador">
+        <p class="marcador-etiqueta">Cantidad ahorrada</p>
+        <p class="marcador-valor" id="marcador-litros">0 lts.</p>
+      </div>
+
+      <img class="planeta" src="img/planeta.png" alt="Planeta Tierra">
+
+      <div class="marcador">
+        <p class="marcador-etiqueta">Intentos</p>
+        <p class="marcador-valor" id="marcador-intentos">0/10</p>
+      </div>
+    </aside>
+
+    <!-- Las 10 tarjetas con su círculo destino se generan por JS a partir de ACCIONES -->
+    <section class="tablero" id="tablero" aria-label="Acciones para ahorrar agua"></section>
+
+    <!-- La fila de fichas arrastrables se genera por JS -->
+    <section class="bandeja" id="bandeja" aria-label="Arrastra estas imágenes"></section>
+
+  </main>
+
+  <!-- Mensaje de fallo: aparece al soltar una ficha en el lugar equivocado -->
+  <div class="mensaje-fallo oculta" id="mensaje-fallo" role="alertdialog" aria-live="assertive">
+    <div class="mensaje-caja">
+      <button class="mensaje-cerrar" id="mensaje-cerrar" aria-label="Cerrar mensaje">✕</button>
+      <p id="mensaje-texto"></p>
+    </div>
+  </div>
+
+  <!-- Mensaje de éxito: aparece al acertar una acción que tenga mensaje -->
+  <div class="mensaje-exito oculta" id="mensaje-exito" role="alertdialog" aria-live="polite">
+    <div class="exito-caja">
+      <button class="mensaje-cerrar" id="exito-cerrar" aria-label="Cerrar mensaje">✕</button>
+      <img class="exito-imagen" id="exito-imagen" alt="">
+      <p class="exito-texto" id="exito-texto"></p>
+    </div>
+  </div>
+
+  <!-- Pantalla de calificación perfecta (10/10) -->
+  <div class="pantalla-perfecta oculta" id="pantalla-perfecta">
+    <div class="perfecta-escena">
+      <!-- Trofeo con laureles (las hojas se dibujan por JS en #laurel-hojas) -->
+      <svg class="perfecta-trofeo" viewBox="0 0 300 400" aria-hidden="true">
+        <defs>
+          <linearGradient id="oro" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#E69A00"/>
+            <stop offset=".45" stop-color="#FFD54A"/>
+            <stop offset="1" stop-color="#D18A00"/>
+          </linearGradient>
+          <g id="laurel">
+            <g id="laurel-hojas" fill="url(#oro)"></g>
+          </g>
+        </defs>
+        <use href="#laurel"/>
+        <use href="#laurel" transform="translate(300 0) scale(-1 1)"/>
+        <!-- asas, copa, tallo y base -->
+        <path d="M105 110 C60 110 60 190 125 215" fill="none" stroke="url(#oro)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M195 110 C240 110 240 190 175 215" fill="none" stroke="url(#oro)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M95 80 H205 C205 170 185 225 150 235 C115 225 95 170 95 80 Z" fill="url(#oro)"/>
+        <rect x="140" y="232" width="20" height="45" fill="url(#oro)"/>
+        <path d="M105 320 H195 L205 345 H95 Z" fill="url(#oro)"/>
+        <rect x="120" y="275" width="60" height="45" rx="6" fill="url(#oro)"/>
+      </svg>
+
+      <div class="perfecta-tarjeta">
+        <p class="perfecta-litros" id="perfecta-litros"></p>
+        <p class="perfecta-texto">¡Felicitaciones! Has obtenido la calificación perfecta, ya sabes cómo cuidar el agua.</p>
+        <p class="perfecta-aciertos">Aciertos: <span id="perfecta-aciertos"></span></p>
+      </div>
+
+      <img class="perfecta-tubo" src="img/tubo_dibujo.png" alt="">
+
+      <button class="perfecta-reiniciar" id="btn-reiniciar" aria-label="Intentar de nuevo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ico-reiniciar"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Pantalla de resultado: 6001 a 11,630 lts -->
+  <div class="pantalla-perfecta oculta" id="pantalla-excelente">
+    <div class="perfecta-escena">
+      <div class="perfecta-tarjeta excelente-tarjeta">
+        <p class="perfecta-litros">6001 a 11,630 lts</p>
+        <p class="perfecta-texto">¡Excelente! Eres campeón del medio ambiente, lo haces perfecto. ¡Felicidades!</p>
+        <p class="perfecta-aciertos excelente-aciertos">Aciertos: <span id="excelente-aciertos"></span></p>
+      </div>
+
+      <img class="excelente-tubo" src="img/tuberia_excelente.png" alt="">
+
+      <button class="perfecta-reiniciar" id="btn-reiniciar-excelente" aria-label="Intentar de nuevo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ico-reiniciar"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Pantalla de resultado: 2501 a 6000 lts -->
+  <div class="pantalla-perfecta oculta" id="pantalla-intermedia">
+    <div class="perfecta-escena">
+      <div class="perfecta-tarjeta excelente-tarjeta">
+        <p class="perfecta-litros">2501 a 6000 lts</p>
+        <p class="perfecta-texto">¡Vas bien! No eres de lo más ahorrador, pero ya tienes conciencia ambiental. ¡No pares, sigue, sigue!</p>
+        <p class="perfecta-aciertos excelente-aciertos">Aciertos: <span id="intermedia-aciertos"></span></p>
+      </div>
+
+      <img class="excelente-tubo intermedia-tubo" src="img/tubo_dibujo.png" alt="">
+
+      <button class="perfecta-reiniciar" id="btn-reiniciar-intermedia" aria-label="Intentar de nuevo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ico-reiniciar"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Pantalla de resultado: 0 a 2500 litros -->
+  <div class="pantalla-perfecta oculta" id="pantalla-insatisfactoria">
+    <div class="perfecta-escena">
+      <div class="perfecta-tarjeta excelente-tarjeta">
+        <p class="perfecta-litros">0 a 2500 litros</p>
+        <p class="perfecta-texto">Mmm… alguien no ha hecho su parte. Queda mucho por ahorrar. Sigue aprendiendo y cuida el agua. ¡Tú puedes!</p>
+        <p class="perfecta-aciertos excelente-aciertos">Aciertos: <span id="insatisfactoria-aciertos"></span></p>
+      </div>
+
+      <img class="excelente-tubo insatisfactoria-tubo" src="img/tuberia_insatisfactorio.png" alt="">
+
+      <button class="perfecta-reiniciar" id="btn-reiniciar-insatisfactoria" aria-label="Intentar de nuevo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#ico-reiniciar"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="js/ahorro.js"></script>
+</body>
+</html>

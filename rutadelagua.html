@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>La ruta del agua potable en BC</title>
+    <link rel="stylesheet" href="css/rutadelagua.css" />
+  </head>
+  <body>
+
+    <!-- Fondo de la escena: ocupa toda la ventana, detrás del escenario -->
+    <img class="fondo-pagina" id="fondo-pagina" alt="" hidden>
+
+    <main class="escenario">
+      <a class="btn-casa" href="index.html" aria-label="Volver al inicio">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3 L2.5 11.5 H5 V21 H19 V11.5 H21.5 Z" fill="#E3262B" stroke="#E3262B" stroke-width="1.5" stroke-linejoin="round"/>
+          <rect x="16" y="5" width="2.6" height="4.5" fill="#E3262B"/>
+          <rect x="8.2" y="13" width="3.4" height="8.7" fill="#FFFFFF"/>
+          <rect x="13.2" y="13" width="3.6" height="3.6" fill="#FFFFFF"/>
+        </svg>
+      </a>
+
+      <img
+          class="logo-portada"
+          src="img/logo.png"
+          alt="CEABC, Comisión Estatal del Agua"
+        />
+
+      <!-- Portada -->
+      <section class="pantalla portada" id="portada">
+        <!-- Tubería, válvulas y fotos (coordenadas del lienzo 1280 x 650) -->
+        <svg class="ruta-svg" viewBox="0 0 1280 650" aria-hidden="true">
+          <defs>
+            <!-- Rueda de válvula: se dibuja una vez y se coloca 3 veces -->
+            <g id="rueda">
+              <circle r="31" fill="none" stroke="#E8A317" stroke-width="7" />
+              <path
+                d="M-22 -22 L22 22 M22 -22 L-22 22"
+                stroke="#2B2B2D"
+                stroke-width="8"
+                stroke-linecap="round"
+              />
+              <circle r="3" fill="#FFFFFF" />
+            </g>
+          </defs>
+
+          <!-- Tubería: un solo trazo que pasa por detrás de las fotos -->
+          <path
+            class="tuberia"
+            d="M0 218 H300 Q329 218 329 189 V164 Q329 135 358 135 H880
+        Q911 135 911 164 V189 Q911 218 940 218 H1115 Q1143 218 1143 247 V395
+        Q1143 424 1114 424 H966 Q937 424 937 395 V371 Q937 342 908 342 H474"
+          />
+
+          <!-- Válvula de entrada (izquierda) -->
+          <g class="hierro">
+            <rect x="8" y="134" width="56" height="8" rx="3" />
+            <rect x="33" y="140" width="10" height="44" />
+            <rect x="16" y="184" width="44" height="56" rx="14" />
+            <rect x="0" y="198" width="8" height="40" />
+            <rect x="66" y="198" width="8" height="40" />
+          </g>
+
+          <!-- Válvula entre las fotos 2 y 3 -->
+          <g class="hierro">
+            <rect x="548" y="108" width="52" height="54" rx="12" />
+            <rect x="534" y="112" width="8" height="46" />
+            <rect x="606" y="112" width="8" height="46" />
+            <rect x="570" y="92" width="8" height="18" />
+            <rect x="548" y="84" width="36" height="8" rx="3" />
+          </g>
+
+          <!-- Válvula con embudo entre las fotos 7 y 6 -->
+          <g class="hierro">
+            <rect x="598" y="320" width="74" height="46" rx="6" />
+            <rect x="588" y="324" width="8" height="38" />
+            <rect x="674" y="324" width="8" height="38" />
+            <polygon points="612,296 658,296 635,318" />
+          </g>
+
+          <!-- Ruedas doradas -->
+          <use href="#rueda" x="870" y="137" />
+          <use href="#rueda" x="981" y="424" />
+          <use href="#rueda" x="635" y="343" />
+
+          <!-- Fotos, en el orden de la ruta (van encima de la tubería) -->
+          <g class="estacion">
+            <image
+              class="foto-ruta"
+              href="img/ruta1.png"
+              x="107"
+              y="146"
+              width="144"
+              height="144"
+            />
+          </g>
+          <g class="estacion">
+            <image
+              class="foto-ruta"
+              href="img/ruta2.png"
+              x="372"
+              y="63"
+              width="144"
+              height="144"
+            />
+          </g>
+          <g class="estacion">
+            <image
+              class="foto-ruta"
+              href="img/ruta4.png"
+              x="624"
+              y="64"
+              width="144"
+              height="144"
+            />
+          </g>
+          <g class="estacion">
+            <image
+              class="foto-ruta"
+              href="img/ruta6.png"
+              x="955"
+              y="145"
+              width="144"
+              height="144"
+            />
+          </g>
+          <g class="estacion">
+            <image
+              class="foto-ruta"
+              href="img/ruta7.png"
+              x="1071"
+              y="352"
+              width="144"
+              height="144"
+            />
+          </g>
+          <g class="estacion">
+            <image
+              class="foto-ruta"
+              href="img/ruta5.png"
+              x="761"
+              y="270"
+              width="144"
+              height="144"
+            />
+          </g>
+          <g class="estacion">
+            <image
+              class="foto-ruta"
+              href="img/ruta3.png"
+              x="402"
+              y="271"
+              width="144"
+              height="144"
+            />
+          </g>
+        </svg>
+
+        <div class="portada-texto">
+          <h1>La ruta del agua potable en B. C.</h1>
+
+          <p>
+            El agua potable es la que utilizamos en nuestras actividades de la
+            vida diaria. En Baja California, el agua que usamos en casa
+            diariamente proviene principalmente del
+            <span class="termino" id="t-rio" tabindex="0">Río Colorado</span> y
+            <span class="termino" id="t-acuifero" tabindex="0">acuíferos</span>,
+            los cuales hay que
+            <span class="termino" id="t-proteger" tabindex="0">proteger</span>
+            para que no se acaben.
+          </p>
+
+          <p>
+            Otra de las fuentes de agua potable es el mar, una vez que se le ha
+            quitado el exceso de sal a través de los procesos de las
+            <span class="termino" id="t-desal" tabindex="0"
+              >plantas desalinizadoras</span
+            >.
+          </p>
+
+          <p>
+            En este momento, vamos a concentrarnos en explicar cómo llega el
+            agua a tu casa desde los ríos y acuíferos.
+          </p>
+        </div>
+
+        <!-- Tarjetas: aparecen abajo a la derecha al pasar el cursor -->
+        <div class="tarjetas">
+          <aside class="tarjeta" id="tarjeta-rio">
+            <b>Río</b> Un río es una corriente natural de agua que fluye con
+            continuidad y desemboca en el mar, en un lago o en otro río. Algunas
+            veces terminan en desiertos.
+          </aside>
+
+          <aside class="tarjeta" id="tarjeta-acuifero">
+            <b>Acuífero</b> Es el espacio en el subsuelo donde circula y se
+            almacena el agua de lluvia que se infiltra a través del suelo.
+            Pueden ser de diferentes tamaños y formas, y además de almacenar
+            agua, la protegen de agentes externos que puedan alterar su calidad.
+          </aside>
+
+          <aside class="tarjeta" id="tarjeta-proteger">
+            <b>Protección de los acuíferos</b> Proteger el entorno natural no
+            destruyendo bosques, fomentar la recuperación de ecosistemas
+            degradados, reducir el uso de agroquímicos que una vez utilizados
+            que se infiltran llegan al acuífero, pero sobre todo, no extraer más
+            agua de la que se almacena de forma natural. Aunque no los vemos,
+            los acuíferos nos proveen agua de la mejor calidad que podemos
+            obtener de forma natural.
+          </aside>
+
+          <aside class="tarjeta" id="tarjeta-desal">
+            <b>Planta desalinizadora</b> Es el sitio donde se obtiene agua de
+            mar, y a través de un proceso fisicoquímico se elimina la sal
+            marina, de tal forma que se obtiene agua potable. Durante su proceso
+            se emplea mucha energía y se generan residuos que deben manejarse
+            adecuadamente para evitar grandes impactos al medio natural, sin
+            embargo, es una alternativa de gran valor en sitios donde el agua
+            superficial y subterránea es prácticamente escasa.
+          </aside>
+        </div>
+      </section>
+
+      <!-- Escena: se llena por JS a partir de ESCENAS -->
+      <section class="pantalla escena oculta" id="escena">
+
+        <div class="letrero" id="escena-letrero" hidden>
+          <div class="letrero-poste" id="letrero-poste"></div>
+          <div class="letrero-panel" id="letrero-panel"><p id="escena-letrero-texto"></p></div>
+        </div>
+
+        <img class="escena-imagen" id="escena-imagen" alt="" hidden>
+        <p class="escena-pie" id="escena-pie" hidden></p>
+
+        <!-- Círculos que aparecen al pasar el cursor sobre una palabra -->
+        <div class="emergente" id="escena-emergente"></div>
+
+        <img class="escena-personaje" id="escena-personaje" alt="" hidden>
+
+        <div class="globo" id="escena-globo">
+          <p id="escena-texto"></p>
+        </div>
+
+        <!-- Tarjeta de definición: aparece al pasar el cursor sobre una palabra resaltada -->
+        <aside class="tarjeta-escena" id="escena-tarjeta">
+          <b id="escena-tarjeta-titulo"></b>
+          <span id="escena-tarjeta-texto"></span>
+        </aside>
+
+      </section>
+
+      <!-- Navegación -->
+      <nav class="navegacion" aria-label="Navegación de la ruta">
+        <button class="btn-nav" id="btn-ant" aria-label="Anterior" hidden>
+          ◀
+        </button>
+        <button class="btn-nav" id="btn-sig" aria-label="Siguiente">▶</button>
+      </nav>
+    </main>
+
+    <script src="js/rutadelagua.js"></script>
+  </body>
+</html>

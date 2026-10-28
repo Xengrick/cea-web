@@ -1,0 +1,502 @@
+:root {
+  --fondo: #48a4cb;
+  --globo: #3C94C6;
+  --globo-borde: #1f4e79;
+  --blanco: #ffffff;
+  --tuberia: #2B2B2D;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--fondo);
+  font-family: system-ui, "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+[hidden] {
+  display: none !important;
+}
+.oculta {
+  display: none !important;
+}
+
+/* Escenario con la proporción del original (1280 x 650) */
+.escenario {
+  position: relative;
+  width: min(100vw, calc(100vh * 1280 / 650));
+  aspect-ratio: 1280 / 650;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--fondo);
+  z-index: 1;
+}
+
+.pantalla {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------- Botón de inicio ---------- */
+.btn-casa {
+  position: absolute;
+  top: 3cqw;
+  left: 5cqw;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 5.5cqw;
+  height: 5.5cqw;
+  padding: .8cqw;
+  background: #FFFFFF;
+  border: .35cqw solid #E3262B;
+  border-radius: .9cqw;
+  box-shadow: 0 .3cqw .8cqw rgba(0, 0, 0, .3);
+  transition: transform .15s;
+}
+
+.btn-casa:hover { transform: scale(1.06); }
+
+.btn-casa svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Portada ---------- */
+.ruta-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tuberia {
+  fill: none;
+  stroke: var(--tuberia);
+  stroke-width: 24;
+  stroke-linejoin: round;
+}
+
+.hierro { fill: var(--tuberia); }
+
+.estacion {
+  filter: drop-shadow(0 .4cqw .7cqw rgba(0, 0, 0, .35));
+}
+
+.foto-ruta { clip-path: circle(50%); }
+
+.logo-portada {
+  position: absolute;
+  top: .7cqw;
+  right: .5cqw;
+  width: 11.7cqw;
+  height: auto;
+  z-index: 5;
+}
+
+.portada-texto {
+  position: absolute;
+  left: 6cqw;
+  top: 24.5cqw;
+  width: 25cqw;
+  color: var(--blanco);
+  text-shadow: 0 .1cqw .3cqw rgba(0, 40, 70, .45);
+}
+
+.portada h1 {
+  margin: 0 0 1cqw;
+  font-size: 2.1cqw;
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: #E3F3FA;
+}
+
+.portada p {
+  margin: 0 0 .5cqw;
+  font-size: 1.05cqw;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* Palabras en negro que muestran su tarjeta */
+.termino {
+  color: #000;
+  font-weight: 800;
+  cursor: help;
+  outline: none;
+  text-shadow: none;
+  text-decoration: underline dotted .1cqw;
+  text-underline-offset: .3cqw;
+  border-radius: .4cqw;
+  transition: background .15s;
+}
+
+.termino:hover,
+.termino:focus {
+  background: #FFD84D;
+  box-shadow: 0 0 0 .25cqw #FFD84D;
+}
+
+/* Tarjetas: centradas en el hueco de la tubería, como en el original */
+.tarjetas {
+  position: absolute;
+  left: 53cqw;
+  top: 41cqw;
+  width: 40cqw;
+  transform: translate(-50%, -50%);
+  display: grid;                 /* todas se apilan en la misma celda */
+  pointer-events: none;
+  z-index: 3;
+}
+
+.tarjeta {
+  grid-area: 1 / 1;
+  align-self: center;
+  padding: 1.6cqw;
+  font-size: 1.05cqw;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1C2B5A;
+  background: #C7E4F0;
+  border-radius: .3cqw;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.tarjeta b {
+  margin-right: .4cqw;
+  font-size: 1.25cqw;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #2A8FD0;
+}
+
+/* Mostrar la tarjeta cuando el cursor (o el foco) está sobre su palabra */
+.portada:has(#t-rio:is(:hover, :focus))      #tarjeta-rio,
+.portada:has(#t-acuifero:is(:hover, :focus)) #tarjeta-acuifero,
+.portada:has(#t-proteger:is(:hover, :focus)) #tarjeta-proteger,
+.portada:has(#t-desal:is(:hover, :focus))    #tarjeta-desal {
+  opacity: 1;
+}
+
+/* ---------- Escena ---------- */
+.escena { overflow: hidden; }
+
+.escena-personaje {
+  position: absolute;
+  z-index: 1;               /* el botón ">" siempre queda por encima */
+  height: auto;
+  /* resplandor celeste alrededor del personaje */
+  filter: drop-shadow(0 0 .5cqw #00CCFF) drop-shadow(0 0 1.5cqw #00CCFF);
+}
+
+/* Globo de diálogo con colita hacia abajo a la izquierda */
+.globo {
+  position: absolute;
+  padding: 1.2cqw 1.4cqw;
+  font-size: 1.4cqw;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--blanco);
+  background: var(--globo);
+  border: .3cqw solid var(--globo-borde);
+  border-radius: 1.6cqw;
+  text-shadow: 0 .1cqw .2cqw rgba(0, 0, 0, .3);
+}
+
+.globo p { margin: 0; }
+
+.globo::before,
+.globo::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent;
+}
+
+.globo::before {                 /* contorno de la colita */
+  left: 1.4cqw;
+  top: 100%;
+  border-width: 3cqw 2.2cqw 0 0;
+  border-top-color: var(--globo-borde);
+}
+
+.globo::after {                  /* relleno de la colita */
+  left: 1.7cqw;
+  top: 100%;
+  margin-top: -.3cqw;
+  border-width: 2.5cqw 1.7cqw 0 0;
+  border-top-color: var(--globo);
+}
+
+/* Palabras resaltadas dentro del globo */
+.enlace { color: #7FA7C4; }
+
+.letrero-poste {
+  position: absolute;
+  background: linear-gradient(90deg, #8D9499, #E6EAEC 45%, #9AA1A6);
+  border-radius: .9cqw .9cqw 0 0;
+}
+
+.letrero-panel {
+  position: absolute;
+  padding: 1.2cqw;
+  background: #EEF2F4;
+  border-radius: .6cqw;
+  box-shadow: 0 .3cqw .8cqw rgba(0, 0, 0, .3);
+}
+
+.letrero-panel p {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 0 .6cqw;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1F2E80;
+  border: .3cqw solid #1F2E80;
+  border-radius: .3cqw;
+}
+
+/* ---------- Navegación ---------- */
+.navegacion {
+  position: absolute;
+  left: 3cqw;
+  right: 3cqw;
+  bottom: 2cqw;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-nav {
+  width: 5cqw;
+  height: 5cqw;
+  font-size: 2.4cqw;
+  color: #E3262B;
+  background: #FFFFFF;
+  border: .4cqw solid #E3262B;
+  border-radius: .8cqw;
+  cursor: pointer;
+  box-shadow: 0 .3cqw .8cqw rgba(0, 0, 0, .3);
+}
+
+.btn-nav:hover:not(:disabled) {
+  background: #FFE9E9;
+}
+
+.btn-nav:disabled {
+  visibility: hidden;
+}
+
+/* Si falta el botón anterior, el siguiente se queda a la derecha */
+#btn-sig {
+  margin-left: auto;
+}
+
+/* ---------- Fondo a pantalla completa ---------- */
+.fondo-pagina {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* llena la ventana sin deformar la foto */
+  z-index: 0;
+}
+
+/* Cuando la escena tiene foto, el escenario deja ver el fondo */
+.escenario.con-fondo { background: transparent; }
+
+/* ---------- Círculo con foto y pie de foto ---------- */
+.escena-imagen {
+  position: absolute;
+  height: auto;
+  clip-path: circle(46.5%);      /* recorta las esquinas, deja el aro blanco */
+}
+
+.escena-pie {
+  position: absolute;
+  margin: 0;
+  text-align: center;
+  font-size: 1.35cqw;
+  font-weight: 600;
+  color: var(--blanco);
+  text-shadow: 0 .1cqw .3cqw rgba(0, 0, 0, .85);
+}
+
+/* ---------- Globo con la colita hacia arriba ---------- */
+.globo.cola-arriba::before {
+  top: auto;
+  bottom: 100%;
+  border-width: 0 2.2cqw 3cqw 0;
+  border-top-color: transparent;
+  border-bottom-color: var(--globo-borde);
+}
+
+.globo.cola-arriba::after {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: -.3cqw;
+  border-width: 0 1.7cqw 2.5cqw 0;
+  border-top-color: transparent;
+  border-bottom-color: var(--globo);
+}
+
+/* Colita arriba a la derecha */
+.globo.cola-arriba-derecha::before {
+  top: auto;
+  bottom: 100%;
+  left: auto;
+  right: 2cqw;
+  border-width: 0 0 3cqw 2.4cqw;
+  border-top-color: transparent;
+  border-bottom-color: var(--globo-borde);
+}
+
+.globo.cola-arriba-derecha::after {
+  top: auto;
+  bottom: 100%;
+  left: auto;
+  right: 2.3cqw;
+  margin-top: 0;
+  margin-bottom: -.3cqw;
+  border-width: 0 0 2.5cqw 1.9cqw;
+  border-top-color: transparent;
+  border-bottom-color: var(--globo);
+}
+
+.globo.cola-derecha::before {
+  left: auto;
+  right: 2cqw;
+  border-width: 3cqw 0 0 2.4cqw;
+  border-top-color: var(--globo-borde);
+}
+.globo.cola-derecha::after {
+  left: auto;
+  right: 2.3cqw;
+  margin-top: -.3cqw;
+  border-width: 2.5cqw 0 0 1.9cqw;
+  border-top-color: var(--globo);
+}
+
+/* ---------- Tarjeta de definición de las escenas ---------- */
+.tarjeta-escena {
+  z-index: 4;
+  position: absolute;
+  transform: translateY(-50%);
+  padding: 1.4cqw 1.6cqw;
+  font-size: 1.05cqw;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1C2B5A;
+  background: rgba(214, 234, 243, .92);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+
+.tarjeta-escena.visible { opacity: 1; }
+
+.tarjeta-escena b {
+  margin-right: .4cqw;
+  font-size: 1.2em;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #2A8FD0;
+}
+
+/* Las palabras con definición avisan que se puede pasar el cursor */
+.enlace[data-def] {
+  cursor: help;
+  text-decoration: underline dotted .1cqw;
+  text-underline-offset: .25cqw;
+}
+
+.escenario.con-fondo,
+.escenario.con-fondo .escena { overflow: visible; }
+
+/* Logo arriba a la izquierda (junto a los botones), solo en escenas que lo pidan */
+.logo-portada.logo-izq {
+  left: 11.4cqw;
+  right: auto;
+  top: .5cqw;
+}
+
+/* ---------- Imagen emergente (círculos + leyendas) ---------- */
+.emergente {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.emergente-grupo {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .25s;
+}
+.emergente-grupo.visible { opacity: 1; }
+
+.emergente img {
+  position: absolute;
+  height: auto;
+}
+
+.emergente-pie {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: .5cqw 1cqw .5cqw 0;
+  background: #11305c;
+  color: #fff;
+  font-size: 1.15cqw;
+  font-weight: 600;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+/* Leyenda sin caja azul: texto centrado con sombra, debajo del círculo */
+.emergente-pie.leyenda {
+  justify-content: center;
+  text-align: center;
+  padding: 0;
+  background: none;
+  font-size: 1.7cqw;
+  text-shadow: 0 .1cqw .3cqw rgba(0, 0, 0, .85);
+}
+
+.enlace[data-emerge] { cursor: pointer; }
+
+/* Texto suelto sobre el fondo*/
+.globo.plano {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+.globo.plano::before,
+.globo.plano::after { display: none; }
+.globo.plano .enlace { color: #0A2A3C; }  
+
+/* Imágenes sueltas de una escena */
+.escena-extra {
+  position: absolute;
+  height: auto;
+}
